@@ -37,6 +37,7 @@ hamil = []
 rows = []
 cols = []
 datas = []
+loopcounter = 0
 #関数定義******************************
 def setter():
     stateFile = open("./newInput/" + inputFile+".txt","r")
@@ -52,7 +53,9 @@ def get_bit(num,i):
     return num >> (SITE_NUM-1-i) & 1
 #ハミルトニアン操作
 def Hamil(vecData):
+    global loopcounter
     ret_hamil = np.zeros(len(vecData),dtype=np.complex128) 
+    loopcounter += 1
     for ind,vecElm in enumerate(vecData):
         for bond in Bonds:
             spin1 = get_bit(States[ind],bond.beforeSite)
@@ -71,7 +74,7 @@ def Hamil(vecData):
     return ret_hamil
 
 def main():
-    global SITE_NUM,States,idToInd
+    global SITE_NUM,States,idToInd,loopcounter
     #inputfileからの読み込み
     setter()
     #出力ファイルの準備
@@ -96,12 +99,14 @@ def main():
             States.append(spins)
             idToInd[spins] = StateInd
             StateInd += 1
+        loopcounter = 0
         hamilton_matrix = LinearOperator(
             shape=(ALL_STATE_NUM, ALL_STATE_NUM),
             matvec=Hamil,
             dtype=np.complex128
         )
         vals, vecs = eigsh(hamilton_matrix, k=1, which='SA') 
+        print(f"loop count is {loopcounter}")
         print(f'MIN_ENEGY is {vals[0]}')
         print(datetime.datetime.now()-startTime)
     logFile.close()
