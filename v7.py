@@ -20,7 +20,7 @@ bond_mod_J = 1
 bond_mod_D = 0.1
 accuracy = 1e-5 #精度
 Bonds = []
-SITE_NUM = 21
+SITE_NUM = 16
 inputFile = f"N={SITE_NUM}"
 #変数********************************
 #Stateの配列
